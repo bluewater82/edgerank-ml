@@ -121,3 +121,75 @@ Instead of taking all signals that passed the thresholds, a ranking system was i
 Tradeoff identified:
 - Looser -> more trades, more total return
 - Stricter -> higher quality, fewer trades
+
+## Asset-Level Insights
+**Strong Contributors**
+- NVDA -> primary signal driver (high volatility, strong trends)
+- SPY/QQQ -> stable, consistent performance
+- AAPL -> lower win rate but positive expectancy
+
+**Weak Contributor**
+- MSFT -> consistently negative performance
+
+**Key Discovery**
+
+Signal  quality is asset-dependent.
+
+Filtering out MSFT:
+- Increased win rate
+- Increased average return
+- Improved robustness across time
+
+## Equity Curve Behavior
+Observed characteristics:
+- Strong growth during favorable regimes (2024-2025)
+- Flat/weak performance during others (2023)
+- No single-trade dominance
+- Moderate drawdowns present
+
+Conclusion:
+**Model is regime-sensitive but not random**
+
+## Experiment Tracking
+Implemented structured logging:
+- CSV-based experiment tracking
+- Key metrics per run
+- Enables systematic comparison across:
+  - Thresholds
+  - Ranking depth
+  - Asset selection
+
+## What This Project Demonstrates
+This system successfully shows:
+- Feature engineering can extract signal from market data
+- Nonlinear models outperform linear baselines
+- Confidence-base filtering is critical
+- Ranking improves signal utilization
+- Asset selection significantly impacts performance
+- Proper experimentation is essential
+
+## Limitations
+This is an early-stage system:
+- No transaction costs or slippage
+- No position sizing or captital allocation
+- No portfolio constraints
+- Limited ticker universe
+- No regime detection (yet)
+
+## Next Steps
+Planned improvements:
+- Expand ticker universe (carefully)
+  - 15-25 diverse assets
+  - Evaluate per-ticker performance
+- Portfolio construction
+  - Allocate capital across signals
+  - Limit exposure
+- Risk management
+  - Stop-loss logic
+  - drawdown analysis
+- Regime awareness
+  - Detect market conditions
+  - Adapt behaviour accordingly
+- Advanced Modeling
+  - Per-ticker models
+  - Ensemble methods
