@@ -1,0 +1,68 @@
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Python cache
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# =========================
+# Virtual environments
+# =========================
+.venv/
+venv/
+env/
+ENV/
+
+# =========================
+# Jupyter Notebook
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# IDE / Editor
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# Data files (VERY IMPORTANT)
+# =========================
+data/raw/
+data/processed/
+*.parquet
+*.csv
+
+# =========================
+# Experiment outputs
+# =========================
+experiments.csv
+*.log
+
+# =========================
+# Model artifacts (future-proofing)
+# =========================
+models/
+*.pkl
+*.joblib
+
+# =========================
+# Environment variables / secrets
+# =========================
+.env
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.temp
+
+# =========================
+# Data
+# =========================
+data/
