@@ -47,7 +47,7 @@ experiments.csv
 # =========================
 # Model artifacts (future-proofing)
 # =========================
-models/
+# models/
 *.pkl
 *.joblib
 
