@@ -3,7 +3,7 @@
 """
 prices.py
 
-A brief description of what this module does.
+Pulls raw pricing data from public database
 
 Author: Andre
 Created: 3/29/2026

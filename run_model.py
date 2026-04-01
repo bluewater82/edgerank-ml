@@ -3,7 +3,7 @@
 """
 run_model.py
 
-A brief description of what this module does.
+Runs the basic linear model (obsolete)
 
 Author: Andre
 Created: 3/30/2026

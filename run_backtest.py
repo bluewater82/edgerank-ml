@@ -3,7 +3,7 @@
 """
 run_backtest.py
 
-A brief description of what this module does.
+Runs our detailed backtest to measure metrics.
 
 Author: Andre
 Created: 3/30/2026

@@ -124,6 +124,7 @@ def get_summary_metrics(df: pd.DataFrame) -> dict:
         "total_return": acted["strategy_return"].sum(),
         "longs": int((acted["signal"] == 1).sum()),
         "shorts": int((acted["signal"] == -1).sum()),
+        "avg_weight": acted["weight"].mean(),
         "max_gain": acted["strategy_return"].max(),
         "max_loss": acted["strategy_return"].min(),
     }
@@ -132,12 +133,31 @@ def get_summary_metrics(df: pd.DataFrame) -> dict:
 def apply_strategy_returns(df: pd.DataFrame) -> pd.DataFrame:
     out = df.copy()
 
-    # Long = earn next_day_return
-    # Short = earn the inverse of next_day_return
-    # Flat = 0
-    out["strategy_return"] = 0.0
-    out.loc[out["signal"] == 1, "strategy_return"] = out["next_day_return"]
-    out.loc[out["signal"] == -1, "strategy_return"] = -out["next_day_return"]
+    # Raw signed return based on direction
+    out["raw_strategy_return"] = 0.0
+    out.loc[out["signal"] == 1, "raw_strategy_return"] = out["next_day_return"]
+    out.loc[out["signal"] == -1, "raw_strategy_return"] = -out["next_day_return"]
+
+    # Default weight = 0 for rows with no signal
+    out["weight"] = 0.0
+
+    acted_mask = out["signal"] != 0
+    acted = out.loc[acted_mask].copy()
+
+    if not acted.empty:
+        # Normalize conviction within each day so total daily exposure sums to 1
+        daily_conviction_sum = acted.groupby("date")["conviction"].transform("sum")
+        acted["weight"] = acted["conviction"] / daily_conviction_sum
+
+        # Weighted return
+        acted["strategy_return"] = acted["raw_strategy_return"] * acted["weight"]
+
+        # Write back into main frame
+        out.loc[acted.index, "weight"] = acted["weight"]
+        out.loc[acted.index, "strategy_return"] = acted["strategy_return"]
+
+    # Any flat rows should contribute zero
+    out["strategy_return"] = out["strategy_return"].fillna(0.0)
 
     return out
 
@@ -217,6 +237,7 @@ def log_experiment(name: str, metrics: dict):
         "total_return",
         "longs",
         "shorts",
+        "avg_weight",
         "max_gain",
         "max_loss",
     ]
@@ -244,9 +265,9 @@ def run_backtest():
     results = generate_signals(
         model,
         test,
-        upper_threshold=0.67,
-        lower_threshold=0.33,
-        allowed_tickers=["AAPL", "NVDA", "SPY", "QQQ"],
+        upper_threshold=0.60,
+        lower_threshold=0.40,
+        allowed_tickers=["AAPL", "NVDA", "IWN", "XLK", "SPY", "NFLX", "GOOG"],
         top_n_per_day=3,
     )
     results = apply_strategy_returns(results)

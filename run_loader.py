@@ -3,7 +3,7 @@
 """
 run_loader.py
 
-A brief description of what this module does.
+Used in conjuction with prices getter module to pull specific ticker prices
 
 Author: Andre
 Created: 3/29/2026
@@ -11,9 +11,26 @@ Created: 3/29/2026
 
 from src.data_ingest.prices import PriceLoader
 
+TICKERS = [
+    # existing
+    "AAPL", "NVDA", "SPY", "QQQ",
+
+    # high vol
+    "AMD", "TSLA", "META", "NFLX",
+
+    # mega cap
+    "MSFT", "GOOG", "AMZN",
+
+    # ETFs
+    "IWM", "DIA",
+
+    # sectors
+    "XLF", "XLK", "XLE"
+]
+
 if __name__ == "__main__":
     loader = PriceLoader()
-    tickers = ["SPY", "QQQ", "AAPL", "MSFT", "NVDA"]
+    tickers = TICKERS
 
     df = loader.fetch_many(
         tickers=tickers,
