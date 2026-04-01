@@ -2,3 +2,7 @@ pandas
 requests
 python-dotenv
 pyarrow
+plotly>=5.18
+kaleido>=0.2.1
+seaborn
+matplotlib

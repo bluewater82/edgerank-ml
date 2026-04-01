@@ -275,6 +275,8 @@ def run_backtest():
     metrics = get_summary_metrics(results)
     log_experiment("top3", metrics)
 
+    results.to_parquet("reports/backtest_results.parquet", index=False)
+
     return results
 
 
