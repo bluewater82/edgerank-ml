@@ -1,195 +1,276 @@
-# EdgeRank
+# 🚀 EdgeRank
 
-A machine learning-based system for ranking high-confidence trading signals.
+> A machine learning system for identifying and executing high-confidence trading opportunities.
 
-## Overview
-EdgeRank is a machine learning-driven trading signal system designed to identify high-confidence short-term price movement in equities. The project evolves from a simple data pipeline into a structured, experiment-driven framework for generating, filtering, and evaluating trading signals.
+---
 
-Rather than attempt to predict every market movement, this system focuses on:
-- Identifying and acting only on the highest-confidence opportunities
+## 🧠 Overview
 
-## Project Goals
-- Build a clean, modular ML pipeline for financial data
-- Explore whether simple technical features contain predictive signal
-- Move from raw predictions -> actionable trading decisions
-- Develop a disciplined, experiment-driven workflow
-- Avoid overfitting and premature scaling
+**EdgeRank** is a machine learning-driven trading system designed to identify **high-probability short-term opportunities in equities**.
 
-## Core Philosophy
-This project is built around a key principle:
-- **Train boadly, act selectively**
-- The model learns from multiple assets
-- The system filters and ranks signals
-- Only the strongest opportunities are executed
+Instead of predicting everything, EdgeRank focuses on:
 
-## System Architecture
-### 1. Data Ingestion
-- Source: free market data
-- Multi-ticker historical OHLCV data
-- Cleaned and stardardized format
-### 2. Feature Engineering
-Features are designed to capture:
-- Returns
-  - 1-day, 5-day, 20-day returns
-- Trend
-  - SMA (5, 20, 50)
-  - Distance from SMA
-- Volatility
-  - Rolling standard deviation (5d, 20d)
-- Volume
-  - Rolling average volume
-  - Volume ration
-- Target
-  - Binary: whether next day closes higher
-  - Continuous: next-day return (for back-testing)
+> **Acting only when confidence is high and the best opportunity is clear.**
 
-## Modeling Approach
-**Baseline Model**
-- Logistic Regression
-- Result: weak signal, poor confidence separation
+The system has evolved into a **hybrid architecture** combining:
+- 🎯 Per-ticker specialization  
+- 🏆 Cross-asset competition  
+- ⚖️ Strict portfolio selection  
 
-**Final Model (Current)**
-- XGBoost (gradient boosted trees)
+---
 
-**Why XGBoost?**
-- Captures nonlinear relationships
-- Handles feature interactions
-- Produces meaningful probability distributions
+## 🎯 Core Philosophy
 
-## Key Breakthrough
-Initial model output:
-- ~98% predictions were near 0.50 -> unusable
+### Train broadly. Act selectively.
+
+- Models learn from historical data per asset  
+- Signals are filtered by confidence thresholds  
+- Opportunities compete across the market  
+- Only the **best trade(s) per day** are executed  
+
+---
+
+## 🏗️ System Architecture
+
+```
+Data → Features → Models → Signals → Ranking → Trades → Backtest
+```
+
+### 1. 📥 Data Ingestion
+- OHLCV market data (free sources)
+- Multi-ticker dataset
+- Cleaned + standardized
+
+---
+
+### 2. 🧮 Feature Engineering
+
+#### Returns
+- 1d, 5d, 20d
+
+#### Trend
+- SMA (5, 20, 50)
+- Distance from SMA
+
+#### Volatility
+- Rolling std (5d, 20d)
+
+#### Volume
+- Volume averages
+- Volume ratios
+
+#### Targets
+- Binary: next-day up/down  
+- Continuous: next-day return  
+
+---
+
+## 🤖 Modeling
+
+### Baseline
+- Logistic Regression  
+- ❌ Result: weak signal (~0.50 collapse)
+
+### Current Model
+- 🌳 **XGBoost**
+
+#### Why?
+- Captures nonlinear patterns  
+- Handles interactions  
+- Produces useful probability spread  
+
+---
+
+## 💡 Key Breakthrough
+
+Before:
+```
+Probabilities ~0.50 → unusable
+```
 
 After XGBoost:
-- Wide probability distribution (0.15 -> 0.86)
-- Enabled meaningful confidence-based decisions
+```
+Probabilities ~0.15 → 0.86
+```
 
-## Signal Generation
-Signals are generated using probability thresholds:
-- Long (1): prob_up >= upper threshold
-- Short (-1): prob_up <= lower threshold
-- No Trade (0): otherwise
+✅ Enabled confidence-based trading decisions
 
-Current working threshold strategy:
-- upper = 0.65
-- lower = 0.35
+---
 
-## Ranking System (Major Upgrade)
-Instead of taking all signals that passed the thresholds, a ranking system was implemented to isolate the strongest signals.
+## 🔄 System Evolution
 
-**Conviction Score**
-- conviction = abs(prob_up - 0.50)
+### Phase 1 — Pooled Model
+- One model for all tickers  
+- Ranked signals globally  
 
-**Daily Selection**
-- Rank signals by conviction
-- Select top N per day
+---
 
-**Final Configuration**
-- top_n_per_day = 3
+### Phase 2 — Asset Filtering
+- Removed weak contributors  
+- Improved stability  
 
-## Backtesting Framework
+---
 
-**Trade Logic**
-- Long -> earn next-day return
-- Short -> earn inverse return
-- No signal -> no trade
+### Phase 3 — Per-Ticker Models
+- One model per asset  
+- Revealed asset-specific behavior  
 
-**Metrics Tracked**
-- Win rate
-- Average return
-- Median return
-- Total return
-- Coverage
-- Max gain/loss
-- Long vs short distribution
+> 💡 Not all tickers behave the same
 
-## Experimental Results
+---
 
-**Ranking Sensitivity (Top N)**
-- **Top N**:
-  - 1: 94 trades, 58.5% win rate, 0.00829 avg return, 0.779 total return
-  - 2: 99 trades, 59.6% win rate, 0.00852 avg return, 0.843 total return
-  - 3: 100 trades, 60.0% win rate, 0.00887 avg return, 0.887 total return
-- **Conclusion**: Signal depth exists beyond just the top candidate
+### Phase 4 — Hybrid System (Current)
 
-**Threshold Sensitivity (Top 3)**
-- **Threshold**
-  - 0.63/0.37: 201 trades, 59.3% win rate, 0.00676 avg return, **1.379** total return
-  - 0.65/0.35: 100 trades, 60.0% win rate, 0.00887 avg return, 0.887 total return
-  - 0.67/0.33: 58 trades, **62.1%** win rate, **0.01176** avg return, 0.682 total return
+- Per-ticker models generate signals  
+- Signals compete globally  
+- Only the **top opportunity per day** is selected  
 
-Tradeoff identified:
-- Looser -> more trades, more total return
-- Stricter -> higher quality, fewer trades
+---
 
-## Asset-Level Insights
-**Strong Contributors**
-- NVDA -> primary signal driver (high volatility, strong trends)
-- SPY/QQQ -> stable, consistent performance
-- AAPL -> lower win rate but positive expectancy
+## 📊 Signal Logic
 
-**Weak Contributor**
-- MSFT -> consistently negative performance
+```
+Long  → prob_up ≥ 0.70
+Short → prob_up ≤ 0.30
+Else  → no trade
+```
 
-**Key Discovery**
+---
 
-Signal  quality is asset-dependent.
+## 🏆 Ranking & Selection
 
-Filtering out MSFT:
-- Increased win rate
-- Increased average return
-- Improved robustness across time
+### Conviction
+```
+conviction = |prob_up - 0.50|
+```
 
-## Equity Curve Behavior
-Observed characteristics:
-- Strong growth during favorable regimes (2024-2025)
-- Flat/weak performance during others (2023)
-- No single-trade dominance
-- Moderate drawdowns present
+### Selection Rule
+```
+top_n_per_day = 1
+```
 
-Conclusion:
-**Model is regime-sensitive but not random**
+> The system acts as a **daily best-opportunity selector**
 
-## Experiment Tracking
-Implemented structured logging:
-- CSV-based experiment tracking
-- Key metrics per run
-- Enables systematic comparison across:
-  - Thresholds
-  - Ranking depth
-  - Asset selection
+---
 
-## What This Project Demonstrates
-This system successfully shows:
-- Feature engineering can extract signal from market data
-- Nonlinear models outperform linear baselines
-- Confidence-base filtering is critical
-- Ranking improves signal utilization
-- Asset selection significantly impacts performance
-- Proper experimentation is essential
+## 📈 Backtesting
 
-## Limitations
-This is an early-stage system:
-- No transaction costs or slippage
-- No position sizing or captital allocation
-- No portfolio constraints
-- Limited ticker universe
-- No regime detection (yet)
+### Trade Logic
+- Long → next-day return  
+- Short → inverse return  
 
-## Next Steps
-Planned improvements:
-- Expand ticker universe (carefully)
-  - 15-25 diverse assets
-  - Evaluate per-ticker performance
-- Portfolio construction
-  - Allocate capital across signals
-  - Limit exposure
-- Risk management
-  - Stop-loss logic
-  - drawdown analysis
-- Regime awareness
-  - Detect market conditions
-  - Adapt behaviour accordingly
-- Advanced Modeling
-  - Per-ticker models
-  - Ensemble methods
+### Metrics
+- Win rate  
+- Avg / median return  
+- Total return  
+- Coverage  
+- Per-ticker stats  
+
+---
+
+## 📊 Current Performance
+
+**Configuration**
+- Thresholds: 0.70 / 0.30  
+- Top trades per day: 1  
+
+**Results**
+- Coverage: ~5%  
+- Win rate: ~55%  
+- Avg return: ~0.24%  
+- Total return: ~90%+  
+
+---
+
+## 🧠 Asset Insights
+
+### 🟢 Strong
+- NVDA (primary alpha driver)
+- AAPL (consistent)
+- SPY (stable)
+
+### 🔴 Weak
+- GOOG
+- XLK
+- NFLX
+
+> 💡 Not all assets deserve equal participation
+
+---
+
+## ⚙️ System Behavior
+
+### Strengths
+- Highly selective  
+- Robust over time  
+- Interpretable decisions  
+
+### Observations
+- Regime-dependent performance  
+- Strong in trending markets  
+- Flat periods exist  
+
+---
+
+## 🧪 Experiment Tracking
+
+- CSV logging system  
+- Tracks:
+  - thresholds  
+  - ranking depth  
+  - performance  
+
+---
+
+## 🧠 What This Demonstrates
+
+- Technical features contain signal  
+- Nonlinear models outperform linear ones  
+- **Selectivity > prediction volume**  
+- Ranking is critical  
+- Specialization improves results  
+
+---
+
+## ⚠️ Limitations
+
+- No transaction costs  
+- No slippage  
+- Limited tickers  
+- No regime detection (yet)  
+- No macro inputs  
+
+---
+
+## 🚀 Future Work
+
+### Short-Term
+- Refine ticker set  
+- Test top_n = 2  
+- Add conviction filters  
+
+### Medium-Term
+- Regime detection  
+- Dynamic thresholds  
+- Risk controls  
+
+### Long-Term
+- Expand universe  
+- Ensemble models  
+- Optional macro features  
+
+---
+
+## 🧭 Summary
+
+EdgeRank is not just a model.
+
+> It is a **decision system** that identifies, ranks, and executes the highest-confidence opportunities in the market.
+
+---
+
+## 👤 Author
+
+Andre — Computer Science @ UNM  
+Focus: AI / ML, Systems, Data Engineering
+
