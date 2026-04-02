@@ -182,6 +182,39 @@ top_n_per_day = 1
 
 ---
 
+## 📊 Visualizations & Results
+The following plots were automatically generated from the backtest using `generate_visualizations.py`. They highlight the strategy's performance, signal quality, and per-asset contribution.
+
+### 📊 Equity Curve
+![EdgeRank ML Equity Curve](reports/visuals/equity_curve.png)
+
+**Interactive version:** [equity_curve_interactive.html](reports/interactives/equity_curve_interactive.html)
+
+This chart shows the cumulative growth of the EdgeRank strategy over the test period. The annotation highlights the strong total return achieved with selective trading.
+
+### 📉 Probability Distribution
+![Predicted Probability Distribution](reports/visuals/probability_distribution.png)
+
+This histogram demonstrates the key improvement from the XGBoost model: a wide, well-calibrated spread of predicted probabilities. Only high-conviction signals (≥ 0.60 for long, ≤ 0.40 for short) are acted upon.
+
+### 📊 Performance by Ticker
+![Performance by Ticker](reports/visuals/per_ticker_performance.png)
+
+**Interactive version:** [per_ticker_performance_interactive.html](reports/interactives/per_ticker_performance_interactive.html)
+
+Breakdown of total strategy return by ticker. This clearly shows **NVDA** as a strong alpha driver while revealing weaker performers (e.g., GOOG).
+
+### 📈 Trade Returns Distribution
+![Trade Returns Distribution](reports/visuals/trade_returns_distribution.png)
+
+Distribution of individual conviction-weighted trade returns. The positive skew supports the selective, high-conviction philosophy of the system.
+
+---
+
+*All visualizations are regenerated automatically whenever the backtest is re-run.*
+
+---
+
 ## 🧠 Asset Insights
 
 ### 🟢 Strong
