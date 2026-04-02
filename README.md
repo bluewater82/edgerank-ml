@@ -188,7 +188,7 @@ The following plots were automatically generated from the backtest using `genera
 ### 📊 Equity Curve
 ![EdgeRank ML Equity Curve](reports/visuals/equity_curve.png)
 
-**Interactive version:** [equity_curve_interactive.html](reports/interactives/equity_curve_interactive.html)
+**Download Interactive version:** [equity_curve_interactive.html](reports/interactives/equity_curve_interactive.html)
 
 This chart shows the cumulative growth of the EdgeRank strategy over the test period. The annotation highlights the strong total return achieved with selective trading.
 
@@ -200,7 +200,7 @@ This histogram demonstrates the key improvement from the XGBoost model: a wide, 
 ### 📊 Performance by Ticker
 ![Performance by Ticker](reports/visuals/per_ticker_performance.png)
 
-**Interactive version:** [per_ticker_performance_interactive.html](reports/interactives/per_ticker_performance_interactive.html)
+**Download Interactive version:** [per_ticker_performance_interactive.html](reports/interactives/per_ticker_performance_interactive.html)
 
 Breakdown of total strategy return by ticker. This clearly shows **NVDA** as a strong alpha driver while revealing weaker performers (e.g., GOOG).
 
