@@ -205,7 +205,7 @@ This histogram demonstrates the key improvement from the XGBoost model: a wide, 
 Breakdown of total strategy return by ticker. This clearly shows **NVDA** as a strong alpha driver while revealing weaker performers (e.g., GOOG).
 
 ### 📈 Trade Returns Distribution
-![Trade Returns Distribution](reports/visuals/trade_returns_distribution.png)
+![Trade Returns Distribution](reports/visuals/daily_trade_returns_dist.png)
 
 Distribution of individual conviction-weighted trade returns. The positive skew supports the selective, high-conviction philosophy of the system.
 
